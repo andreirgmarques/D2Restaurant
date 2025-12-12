@@ -171,7 +171,7 @@ end;
 procedure TFormProduct.OpenDependencies;
 begin
   DM.QryProductCategory.Close;
-  DM.QryProductCategory.MacroByName('filter').AsRaw         := 'WHERE id_account = :id_account';
+  DM.QryProductCategory.MacroByName('filter').AsRaw         := 'WHERE id_account = :id_account AND status = ''Active''';
   DM.QryProductCategory.ParamByName('id_account').AsInteger := D2Restaurant.IdAccount;
   DM.QryProductCategory.Open;
   DM.QryProductCategory.IndexFieldNames := 'name';
