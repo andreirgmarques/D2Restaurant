@@ -185,6 +185,14 @@
             <Form>FormSalesOrderCategory</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Unit_SalesOrderProduct.pas">
+            <Form>FormSalesOrderProduct</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Unit_SalesOrderItem.pas">
+            <Form>FormSalesOrderItem</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

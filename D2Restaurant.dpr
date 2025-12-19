@@ -24,7 +24,9 @@ uses
   Unit_ProductCategory in 'Unit_ProductCategory.pas' {FormProductCategory},
   Unit_Product in 'Unit_Product.pas' {FormProduct},
   Unit_SalesOrder in 'Unit_SalesOrder.pas' {FormSalesOrder},
-  Unit_SalesOrderCategory in 'Unit_SalesOrderCategory.pas' {FormSalesOrderCategory};
+  Unit_SalesOrderCategory in 'Unit_SalesOrderCategory.pas' {FormSalesOrderCategory},
+  Unit_SalesOrderProduct in 'Unit_SalesOrderProduct.pas' {FormSalesOrderProduct},
+  Unit_SalesOrderItem in 'Unit_SalesOrderItem.pas' {FormSalesOrderItem};
 
 {$R *.res}
 
