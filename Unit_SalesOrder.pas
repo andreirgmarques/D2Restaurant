@@ -44,6 +44,8 @@ type
     procedure BtnSaveClick(Sender: TObject);
     procedure BtnDeleteClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
+    procedure MnuMarkAsReadyClick(Sender: TObject);
+    procedure MnuMarkAsCompletedClick(Sender: TObject);
   private
     { Private declarations }
     procedure OpenQuery;
@@ -53,6 +55,8 @@ type
   public
     { Public declarations }
     procedure AddSalesOrderItem;
+    procedure StatusToCompleted;
+    procedure StatusToReady;
   protected
     procedure ExportD2Bridge; override;
     procedure InitControlsD2Bridge(const PrismControl: TPrismControl); override;
@@ -364,6 +368,16 @@ begin
   end;
 end;
 
+procedure TFormSalesOrder.MnuMarkAsCompletedClick(Sender: TObject);
+begin
+  Self.StatusToCompleted;
+end;
+
+procedure TFormSalesOrder.MnuMarkAsReadyClick(Sender: TObject);
+begin
+  Self.StatusToReady;
+end;
+
 procedure TFormSalesOrder.OpenDependencies;
 begin
   DM.QryTag.Close;
@@ -443,6 +457,41 @@ begin
       DBTxtStatus.Color      := CSSClass.Color.TColor.secondary
     else if SameText(DM.QrySalesOrder.FieldByName('status').AsString, SALES_ORDER_STATUS_CANCELED) then
       DBTxtStatus.Color      := CSSClass.Color.TColor.danger;
+  end;
+end;
+
+procedure TFormSalesOrder.StatusToCompleted;
+begin
+  if SameText(DM.QrySalesOrder.FieldByName('status').AsString, SALES_ORDER_STATUS_READY) or
+     SameText(DM.QrySalesOrder.FieldByName('status').AsString, SALES_ORDER_STATUS_PREPARING) then
+  begin
+    if MessageDlg('Mark as Completed this Sales Order?', mtConfirmation, mbYesNo, 0) = mrYes then
+    begin
+      DM.QrySalesOrder.Edit;
+      DM.QrySalesOrder.FieldByName('status').AsString := SALES_ORDER_STATUS_COMPLETED;
+      DM.QrySalesOrder.Post;
+      Self.Close;
+    end;
+  end
+  else begin
+    ShowMessage('Status invalid in Order', True, True, 4000, TMsgDlgType.mtError);
+  end;
+end;
+
+procedure TFormSalesOrder.StatusToReady;
+begin
+  if SameText(DM.QrySalesOrder.FieldByName('status').AsString, SALES_ORDER_STATUS_PREPARING) then
+  begin
+    if MessageDlg('Mark as Ready this Sales Order?', mtConfirmation, mbYesNo, 0) = mrYes then
+    begin
+      DM.QrySalesOrder.Edit;
+      DM.QrySalesOrder.FieldByName('status').AsString := SALES_ORDER_STATUS_READY;
+      DM.QrySalesOrder.Post;
+      Self.Close;
+    end;
+  end
+  else begin
+    ShowMessage('Status invalid in Order', True, True, 4000, TMsgDlgType.mtError);
   end;
 end;
 

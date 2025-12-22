@@ -22,6 +22,7 @@ type
     procedure Tag1Click(Sender: TObject);
     procedure Category1Click(Sender: TObject);
     procedure Product1Click(Sender: TObject);
+    procedure Dashboard1Click(Sender: TObject);
   private
 
   public
@@ -37,7 +38,7 @@ function FormMenu: TFormMenu;
 implementation
 
 uses
-  D2RestaurantWebApp, Unit_Tag, Unit_ProductCategory, Unit_Product;
+  D2RestaurantWebApp, Unit_Tag, Unit_ProductCategory, Unit_Product, Unit_Dashboard;
 
 function FormMenu: TFormMenu;
 begin
@@ -47,6 +48,13 @@ end;
 {$R *.dfm}
 
 { TForm1 }
+
+procedure TFormMenu.Dashboard1Click(Sender: TObject);
+begin
+  if FormDashboard = nil then
+    TFormDashboard.CreateInstance;
+  FormDashboard.Show;
+end;
 
 procedure TFormMenu.ExportD2Bridge;
 begin

@@ -314,9 +314,11 @@ object FormSalesOrder: TFormSalesOrder
     Top = 64
     object MnuMarkAsReady: TMenuItem
       Caption = 'Mark as Ready'
+      OnClick = MnuMarkAsReadyClick
     end
     object MnuMarkAsCompleted: TMenuItem
       Caption = 'Mark as Completed'
+      OnClick = MnuMarkAsCompletedClick
     end
   end
 end

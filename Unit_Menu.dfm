@@ -17,6 +17,7 @@ object FormMenu: TFormMenu
     Top = 152
     object Dashboard1: TMenuItem
       Caption = 'Dashboard'
+      OnClick = Dashboard1Click
     end
     object Checkout1: TMenuItem
       Caption = 'Checkout'
