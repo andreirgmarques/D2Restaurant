@@ -21,6 +21,7 @@ object FormMenu: TFormMenu
     end
     object Checkout1: TMenuItem
       Caption = 'Checkout'
+      OnClick = Checkout1Click
     end
     object Config1: TMenuItem
       Caption = 'Config'

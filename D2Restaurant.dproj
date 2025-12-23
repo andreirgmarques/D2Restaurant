@@ -193,6 +193,14 @@
             <Form>FormSalesOrderItem</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Unit_TagSalesOrder.pas">
+            <Form>FormTagSalesOrder</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Unit_Checkout.pas">
+            <Form>FormCheckout</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
