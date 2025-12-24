@@ -184,6 +184,10 @@ function TFormProductCategory.CrudOnDelete: Boolean;
 begin
   Result := inherited;
 
+  // FIX Closed Query
+  if ActiveOperation = OpSearch then
+    Self.OpenQuery;
+
   if DM.QryProductCategory.FieldByName('id').AsInteger > 0 then
   begin
     DM.QryProduct.Close;

@@ -250,6 +250,10 @@ function TFormTag.CrudOnDelete: boolean;
 begin
   Result := inherited;
 
+  // FIX Closed Query
+  if ActiveOperation = OpSearch then
+    Self.OpenQuery;
+
   if DM.QryTag.FieldByName('id').AsInteger > 0 then
   begin
     DM.QrySalesOrder.Close;

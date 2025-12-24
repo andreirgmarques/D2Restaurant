@@ -8,7 +8,6 @@ inherited FormTag: TFormTag
   inherited Crud_PageControl: TPageControl
     Width = 831
     Height = 525
-    ActivePage = Crud_TabSheetData
     ExplicitWidth = 831
     ExplicitHeight = 525
     inherited Crud_TabSheetSearch: TTabSheet

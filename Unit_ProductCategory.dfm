@@ -2,7 +2,6 @@ inherited FormProductCategory: TFormProductCategory
   Caption = 'FormProductCategory'
   TextHeight = 14
   inherited Crud_PageControl: TPageControl
-    ActivePage = Crud_TabSheetData
     inherited Crud_TabSheetSearch: TTabSheet
       inherited Crud_DBGrid_Search: TDBGrid
         Columns = <
