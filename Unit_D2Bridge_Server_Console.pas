@@ -76,15 +76,15 @@ var
   IR: TInputRecord;
   amt: cardinal;
 begin
-  result                            := 0;
+  Result                            := 0;
   IR.EventType                      := KEY_EVENT;
-  IR.Event.KeyEvent.bKeyDown        := true;
+  IR.Event.KeyEvent.bKeyDown        := True;
   IR.Event.KeyEvent.wVirtualKeyCode := VK_RETURN;
   while not TD2BridgeServerConsole.TimerThreadTerminated do
   begin
     if TD2BridgeServerConsole.WaitingForReturn and (Now >= TD2BridgeServerConsole.TimeoutAt) then
       WriteConsoleInput(TD2BridgeServerConsole.hIn, IR, 1, amt);
-    sleep(500);
+    Sleep(500);
   end;
 end;
 
@@ -95,7 +95,7 @@ end;
 
 procedure EndTimerThread;
 begin
-  TD2BridgeServerConsole.TimerThreadTerminated := true;
+  TD2BridgeServerConsole.TimerThreadTerminated := True;
   WaitForSingleObject(TD2BridgeServerConsole.hTimer, 1000);
   CloseHandle(TD2BridgeServerConsole.hTimer);
 end;
@@ -107,14 +107,14 @@ var
   ConsoleInfo: TConsoleScreenBufferInfo;
 begin
   TD2BridgeServerConsole.TimeoutAt        := IncSecond(Now, Time);
-  TD2BridgeServerConsole.WaitingForReturn := true;
+  TD2BridgeServerConsole.WaitingForReturn := True;
 
   while ReadConsoleInput(TD2BridgeServerConsole.hIn, IR, 1, nEvents) do
   begin
     if (IR.EventType = KEY_EVENT) and (TKeyEventRecord(IR.Event).wVirtualKeyCode = VK_RETURN) and
       (TKeyEventRecord(IR.Event).bKeyDown) then
     begin
-      TD2BridgeServerConsole.WaitingForReturn := false;
+      TD2BridgeServerConsole.WaitingForReturn := False;
       break;
     end;
 
@@ -124,16 +124,16 @@ begin
       begin
         if TD2BridgeServerConsole.vInputConsole <> '' then
         begin
-          write(Char(TKeyEventRecord(IR.Event).AsciiChar));
-          write(StringOfChar(' ', 1));
-          write(Char(TKeyEventRecord(IR.Event).AsciiChar));
+          Write(Char(TKeyEventRecord(IR.Event).AsciiChar));
+          Write(StringOfChar(' ', 1));
+          Write(Char(TKeyEventRecord(IR.Event).AsciiChar));
 
           TD2BridgeServerConsole.vInputConsole := Copy(TD2BridgeServerConsole.vInputConsole, 1, Length(TD2BridgeServerConsole.vInputConsole) - 1);
         end;
       end
       else
       begin
-        write(Char(TKeyEventRecord(IR.Event).AsciiChar));
+        Write(Char(TKeyEventRecord(IR.Event).AsciiChar));
         TD2BridgeServerConsole.vInputConsole := TD2BridgeServerConsole.vInputConsole + TKeyEventRecord(IR.Event).AsciiChar;
       end;
 
@@ -148,7 +148,7 @@ end;
 class procedure TD2BridgeServerConsole.ClearLine(Line: Integer);
 begin
   SetCursorPosition(0, Line);
-  write(StringOfChar(' ', ConsoleWidth));
+  Write(StringOfChar(' ', ConsoleWidth));
   SetCursorPosition(0, Line);
 end;
 
@@ -157,7 +157,7 @@ var
   ConsoleInfo: TConsoleScreenBufferInfo;
 begin
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), ConsoleInfo);
-  result := ConsoleInfo.dwSize.X;
+  Result := ConsoleInfo.dwSize.X;
 end;
 
 class procedure TD2BridgeServerConsole.DisplayInfo;
@@ -185,8 +185,8 @@ begin
   if D2BridgeServerController.IsD2DockerContext then
     Exit;
 
-  WaitingForReturn      := false;
-  TimerThreadTerminated := false;
+  WaitingForReturn      := False;
+  TimerThreadTerminated := False;
 
   if not IsDebuggerPresent then
     vSecForWaitEnter := 5
@@ -206,7 +206,7 @@ begin
 
   vInputConsole := IntToStr(vServerPort);
   Writeln('Enter the Server Port and press [ENTER]');
-  write('Server Port: ' + TD2BridgeServerConsole.vInputConsole);
+  Write('Server Port: ' + TD2BridgeServerConsole.vInputConsole);
   TimeoutWait(vSecForWaitEnter);
   vServerPort := StrToInt(vInputConsole);
 
@@ -215,7 +215,7 @@ begin
 
   vInputConsole := VServerName;
   Writeln('Enter the Server Name and press [ENTER]');
-  write('Server Name: ' + TD2BridgeServerConsole.vInputConsole);
+  Write('Server Name: ' + TD2BridgeServerConsole.vInputConsole);
   TimeoutWait(vSecForWaitEnter);
   VServerName := vInputConsole;
 
@@ -229,16 +229,14 @@ begin
   D2BridgeServerController := TD2RestaurantWebAppGlobal.Create(nil);
 
   // App Information
-  {
-    D2BridgeServerController.ServerAppTitle:= 'My App D2Bridge';
-    D2BridgeServerController.ServerAppDescription:= 'My App Descrition';
-    D2BridgeServerController.ServerAppAuthor:= 'Talis Jonatas Gomes';
-  }
+  D2BridgeServerController.ServerAppTitle       := 'D2Restaurant';
+  D2BridgeServerController.ServerAppDescription := 'APP Course D2Restaurant';
+  D2BridgeServerController.ServerAppAuthor      := 'My Company';
 
   vServerPort := D2BridgeServerController.APPConfig.ServerPort(8888);
   VServerName := D2BridgeServerController.APPConfig.ServerName('D2Restaurant Server');
 
-  D2BridgeServerController.APPName := 'D2Restaurant';
+  // D2BridgeServerController.APPName := 'D2Restaurant';
   // D2BridgeServerController.APPDescription:= 'My D2Bridge Web APP';
 
 
@@ -246,15 +244,15 @@ begin
 
   // Security
   {
-    D2BridgeServerController.Prism.Options.Security.Enabled:= false; //True Default
-    D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.EnableSpamhausList:= false; //Disable Default Blocked Spamhaus list
+    D2BridgeServerController.Prism.Options.Security.Enabled:= False; //True Default
+    D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.EnableSpamhausList:= False; //Disable Default Blocked Spamhaus list
     D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.Add('192.168.10.31'); //Block just IP
     D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.Add('200.200.200.0/24'); //Block CDIR
-    D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.EnableSelfDelist:= false; //Disable Delist
+    D2BridgeServerController.Prism.Options.Security.IP.IPv4BlackList.EnableSelfDelist:= False; //Disable Delist
     D2BridgeServerController.Prism.Options.Security.IP.IPv4WhiteList.Add('192.168.0.1'); //Add IP or CDIR to WhiteList
     D2BridgeServerController.Prism.Options.Security.IP.IPConnections.LimitNewConnPerIPMin:= 30; //Limite Connections from IP *minute
     D2BridgeServerController.Prism.Options.Security.IP.IPConnections.LimitActiveSessionsPerIP:= 50; //Limite Sessions from IP
-    D2BridgeServerController.Prism.Options.Security.UserAgent.EnableCrawlerUserAgents:= false; //Disable Default Blocked Crawler User Agents
+    D2BridgeServerController.Prism.Options.Security.UserAgent.EnableCrawlerUserAgents:= False; //Disable Default Blocked Crawler User Agents
     D2BridgeServerController.Prism.Options.Security.UserAgent.Add('NewUserAgent'); //Block User Agent
     D2BridgeServerController.Prism.Options.Security.UserAgent.Delete('MyUserAgent'); //Allow User Agent
   }
@@ -269,9 +267,9 @@ begin
     D2BridgeServerController.Prism.Rest.Options.Security.JWTRefresh.ExpirationDays:= 30;
     D2BridgeServerController.Prism.Rest.Options.MaxRecord:= 2000;
     D2BridgeServerController.Prism.Rest.Options.ShowMetadata:= show;
-    D2BridgeServerController.Prism.Rest.Options.FieldNameLowerCase:= true;
+    D2BridgeServerController.Prism.Rest.Options.FieldNameLowerCase:= True;
     D2BridgeServerController.Prism.Rest.Options.FormatSettings.ShortDateFormat:= 'YYYY-MM-DD';
-    D2BridgeServerController.Prism.Rest.Options.EnableRESTServerExternal:= true;
+    D2BridgeServerController.Prism.Rest.Options.EnableRESTServerExternal:= True;
   }
 
   // seconds to Send Session to TimeOut and Destroy after Disconnected
@@ -280,21 +278,21 @@ begin
   // secounds to set Session in Idle
   // D2BridgeServerController.Prism.Options.SessionIdleTimeOut:= 0;
 
-  D2BridgeServerController.Prism.Options.IncludeJQuery := true;
+  D2BridgeServerController.Prism.Options.IncludeJQuery := True;
 
-  // D2BridgeServerController.Prism.Options.DataSetLog:= true;
+  // D2BridgeServerController.Prism.Options.DataSetLog:= True;
 
-  D2BridgeServerController.Prism.Options.CoInitialize := true;
+  D2BridgeServerController.Prism.Options.CoInitialize := True;
 
-  // D2BridgeServerController.Prism.Options.VCLStyles:= false;
+  // D2BridgeServerController.Prism.Options.VCLStyles:= False;
 
-  // D2BridgeServerController.Prism.Options.ShowError500Page:= false;
+  // D2BridgeServerController.Prism.Options.ShowError500Page:= False;
 
   // Uncomment to Dual Mode force http just in Debug Mode
   // if IsDebuggerPresent then
-  // D2BridgeServerController.Prism.Options.SSL:= false
+  // D2BridgeServerController.Prism.Options.SSL:= False
   // else
-  // D2BridgeServerController.Prism.Options.SSL:= true;
+  // D2BridgeServerController.Prism.Options.SSL:= True;
 
   D2BridgeServerController.Languages := [TD2BridgeLang.English];
 
@@ -326,7 +324,7 @@ begin
     while D2BridgeServerController.Started do
     begin
       DisplayInfo;
-      sleep(1);
+      Sleep(1);
       SetCursorPosition(0, 0);
     end;
   except
