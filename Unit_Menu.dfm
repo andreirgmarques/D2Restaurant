@@ -11,6 +11,7 @@ object FormMenu: TFormMenu
   Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
+  OnCreate = FormCreate
   TextHeight = 14
   object MainMenu1: TMainMenu
     Left = 176

@@ -25,6 +25,7 @@ type
     procedure Dashboard1Click(Sender: TObject);
     procedure Checkout1Click(Sender: TObject);
     procedure User1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
 
   public
@@ -84,6 +85,16 @@ begin
       Image.Local := 'support\images\logo\logod2restaurant2.png';
     end;
   end;
+end;
+
+procedure TFormMenu.FormCreate(Sender: TObject);
+begin
+  Checkout1.Visible := D2Restaurant.UserAdmin;
+  Config1.Visible   := D2Restaurant.UserAdmin;
+  Product1.Visible  := D2Restaurant.UserAdmin;
+  Category1.Visible := D2Restaurant.UserAdmin;
+  Tag1.Visible      := D2Restaurant.UserAdmin;
+  User1.Visible     := D2Restaurant.UserAdmin;
 end;
 
 procedure TFormMenu.InitControlsD2Bridge(const PrismControl: TPrismControl);
