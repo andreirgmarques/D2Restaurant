@@ -28,7 +28,8 @@ uses
   Unit_SalesOrderProduct in 'Unit_SalesOrderProduct.pas' {FormSalesOrderProduct},
   Unit_SalesOrderItem in 'Unit_SalesOrderItem.pas' {FormSalesOrderItem},
   Unit_TagSalesOrder in 'Unit_TagSalesOrder.pas' {FormTagSalesOrder},
-  Unit_Checkout in 'Unit_Checkout.pas' {FormCheckout};
+  Unit_Checkout in 'Unit_Checkout.pas' {FormCheckout},
+  Unit_User in 'Unit_User.pas' {FormUser};
 
 {$R *.res}
 

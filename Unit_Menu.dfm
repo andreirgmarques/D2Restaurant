@@ -39,6 +39,7 @@ object FormMenu: TFormMenu
       end
       object User1: TMenuItem
         Caption = 'User'
+        OnClick = User1Click
       end
     end
     object Logout1: TMenuItem

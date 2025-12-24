@@ -201,6 +201,10 @@
             <Form>FormCheckout</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Unit_User.pas">
+            <Form>FormUser</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
