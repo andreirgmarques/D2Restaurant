@@ -12,6 +12,7 @@ object FormLogin: TFormLogin
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  OnActivate = FormActivate
   OnShow = FormShow
   TextHeight = 15
   object Image_BackGround: TImage

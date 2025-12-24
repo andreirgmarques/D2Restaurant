@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls,
   Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Menus, Vcl.Imaging.pngimage, Vcl.ExtCtrls,
-  D2Bridge.Forms; // Declare D2Bridge.Forms always in the last unit
+  D2Bridge.Forms, System.DateUtils; // Declare D2Bridge.Forms always in the last unit
 
 type
   TFormLogin = class(TD2BridgeForm)
@@ -23,8 +23,11 @@ type
     procedure Button_ShowPassClick(Sender: TObject);
     procedure LblSignUpClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
-
+    procedure LoadCookieUser;
+    procedure SaveCookieUser;
+    procedure SaveSessionValues;
   public
 
   protected
@@ -41,6 +44,7 @@ uses
   D2RestaurantWebApp, Unit_Dashboard, Unit_MailConfirmation, Unit_DM, Useful;
 
 const
+  SESSION_COOKIE_NAME     = 'd2restaurantsession';
   POPUP_MAIL_CONFIRMATION = 'PopupMailConfirmation';
 
 function FormLogin: TFormLogin;
@@ -83,12 +87,8 @@ begin
     Exit;
   end;
 
-  D2Restaurant.IdUser      := DM.QryUser.FieldByName('id').AsInteger;
-  D2Restaurant.IdAccount   := DM.QryUser.FieldByName('id_account').AsInteger;
-  D2Restaurant.UserName    := DM.QryUser.FieldByName('name').AsString;
-  D2Restaurant.UserAdmin   := SameText(DM.QryUser.FieldByName('admin').AsString, 'Yes');
-  D2Restaurant.UserAccount := SameText(DM.QryUser.FieldByName('account_user').AsString, 'Yes');
-  D2Restaurant.UserEmail   := DM.QryUser.FieldByName('email').AsString;
+  Self.SaveSessionValues;
+  Self.SaveCookieUser;
 
   if FormDashboard = nil then
     TFormDashboard.CreateInstance;
@@ -177,6 +177,11 @@ begin
   end;
 end;
 
+procedure TFormLogin.FormActivate(Sender: TObject);
+begin
+  Self.LoadCookieUser;
+end;
+
 procedure TFormLogin.FormShow(Sender: TObject);
 begin
   if IsDebuggerPresent then
@@ -197,6 +202,36 @@ begin
   ShowPopup(POPUP_MAIL_CONFIRMATION);
 end;
 
+procedure TFormLogin.LoadCookieUser;
+begin
+  if Session.Cookies.Exist(SESSION_COOKIE_NAME) then
+  begin
+    var LHash := Session.Cookies.Value[SESSION_COOKIE_NAME];
+    if LHash <> '' then
+    begin
+      if DM = nil then
+        TDM.CreateInstance;
+
+      DM.QryUser.Close;
+      DM.QryUser.MacroByName('filter').AsRaw  := 'WHERE hash = :hash AND hash_expires > current_timestamp(0) AND status = ''Active''';
+      DM.QryUser.ParamByName('hash').AsString := LHash;
+      DM.QryUser.Open;
+      if not DM.QryUser.IsEmpty then
+      begin
+        Self.SaveCookieUser;
+        Self.SaveSessionValues;
+
+        if FormDashboard = nil then
+          TFormDashboard.CreateInstance;
+        FormDashboard.Show;
+      end
+      else begin
+        Session.Cookies.Delete(SESSION_COOKIE_NAME);
+      end;
+    end;
+  end;
+end;
+
 procedure TFormLogin.RenderD2Bridge(const PrismControl: TPrismControl; var HTMLControl: string);
 begin
   inherited;
@@ -207,6 +242,33 @@ begin
     HTMLControl:= '</>';
     end;
   }
+end;
+
+procedure TFormLogin.SaveCookieUser;
+begin
+  var LHash    := Session.PushID;
+  var LExpires := IncHour(Now, 8);
+
+  try
+    DM.QryUser.Edit;
+    DM.QryUser.FieldByName('hash').AsString           := LHash;
+    DM.QryUser.FieldByName('hash_expires').AsDateTime := LExpires;
+    DM.QryUser.Post;
+  except
+  end;
+
+  // Save cookie value
+  Session.Cookies.Add(SESSION_COOKIE_NAME, LHash, LExpires, '/');
+end;
+
+procedure TFormLogin.SaveSessionValues;
+begin
+  D2Restaurant.IdUser      := DM.QryUser.FieldByName('id').AsInteger;
+  D2Restaurant.IdAccount   := DM.QryUser.FieldByName('id_account').AsInteger;
+  D2Restaurant.UserName    := DM.QryUser.FieldByName('name').AsString;
+  D2Restaurant.UserAdmin   := SameText(DM.QryUser.FieldByName('admin').AsString, 'Yes');
+  D2Restaurant.UserAccount := SameText(DM.QryUser.FieldByName('account_user').AsString, 'Yes');
+  D2Restaurant.UserEmail   := DM.QryUser.FieldByName('email').AsString;
 end;
 
 end.
