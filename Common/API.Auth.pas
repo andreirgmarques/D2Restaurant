@@ -139,9 +139,9 @@ begin
     Exit;
   end;
 
+  Response.JSON.AddPair('accountid', RestSession.DM.QryAccount.FieldByName('id').AsInteger);
   Response.JSON.AddPair('accountname', RestSession.DM.QryAccount.FieldByName('name').AsString);
   Response.JSON.AddPair('userid', RestSession.DM.QryUser.FieldByName('id').AsInteger);
-  Response.JSON.AddPair('useridaccount', RestSession.DM.QryUser.FieldByName('id_account').AsInteger);
   Response.JSON.AddPair('username', RestSession.DM.QryUser.FieldByName('name').AsString);
   Response.JSON.AddPair('useremail', RestSession.DM.QryUser.FieldByName('email').AsString);
   Response.JSON.AddPair('useradmin', SameText(RestSession.DM.QryUser.FieldByName('admin').AsString, 'Yes'));
