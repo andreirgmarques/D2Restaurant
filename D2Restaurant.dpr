@@ -29,7 +29,9 @@ uses
   Unit_SalesOrderItem in 'Unit_SalesOrderItem.pas' {FormSalesOrderItem},
   Unit_TagSalesOrder in 'Unit_TagSalesOrder.pas' {FormTagSalesOrder},
   Unit_Checkout in 'Unit_Checkout.pas' {FormCheckout},
-  Unit_User in 'Unit_User.pas' {FormUser};
+  Unit_User in 'Unit_User.pas' {FormUser},
+  API.Auth in 'Common\API.Auth.pas',
+  D2Bridge.Rest.Session in 'Common\D2Bridge.Rest.Session.pas';
 
 {$R *.res}
 

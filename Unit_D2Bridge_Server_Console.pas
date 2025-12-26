@@ -260,11 +260,11 @@ begin
   D2BridgeServerController.PrimaryFormClass := TFormLogin;
 
   // * REST OPTIONS
+  D2BridgeServerController.Prism.Rest.Options.Security.JWTAccess.Secret            := 'tu5d9bWL10L01HrOatebd1bvFinqJ6rh5kp5';
+  D2BridgeServerController.Prism.Rest.Options.Security.JWTAccess.ExpirationMinutes := 30;
+  D2BridgeServerController.Prism.Rest.Options.Security.JWTRefresh.Secret           := 'mKW64lJ387D5BHCLMRuagYW17CNoQXKes5EzWigBIKLDA8gGa7';
+  D2BridgeServerController.Prism.Rest.Options.Security.JWTRefresh.ExpirationDays   := 30;
   {
-    D2BridgeServerController.Prism.Rest.Options.Security.JWTAccess.Secret:= 'My Secret';
-    D2BridgeServerController.Prism.Rest.Options.Security.JWTAccess.ExpirationMinutes:= 30;
-    D2BridgeServerController.Prism.Rest.Options.Security.JWTRefresh.Secret:= 'My Secret Refresh Token';
-    D2BridgeServerController.Prism.Rest.Options.Security.JWTRefresh.ExpirationDays:= 30;
     D2BridgeServerController.Prism.Rest.Options.MaxRecord:= 2000;
     D2BridgeServerController.Prism.Rest.Options.ShowMetadata:= show;
     D2BridgeServerController.Prism.Rest.Options.FieldNameLowerCase:= True;
