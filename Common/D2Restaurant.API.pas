@@ -6,6 +6,7 @@ uses
   System.Classes, System.SysUtils,
   // Your Rest API Client Modules
   Auth.API.Client, // Insert Module Client Auth or comment this module
+  SalesOrder.API.Client,
   // API Transport Client
   D2Bridge.Rest.Http;
 
@@ -18,13 +19,14 @@ type
   TD2RestaurantAPI = class(TD2BridgeRestRootClient)
   private
     FAuth: TAuthRestAPIClient; // Rest API Auth Module
-    // Your Variables API Client Modules
+    FSalesOrder: TSalesOrderAPIClient;
   public
     constructor Create;
     destructor Destroy; override;
 
     // Your Class API Function
     function Auth: TAuthRestAPIClient;
+    function SalesOrder: TSalesOrderAPIClient;
   end;
 
 const
@@ -50,7 +52,7 @@ begin
   FAuth := TAuthRestAPIClient.Create(Core);
 
   // Instance Client Modules
-
+  FSalesOrder := TSalesOrderAPIClient.Create(Core);
 end;
 
 destructor TD2RestaurantAPI.Destroy;
@@ -58,13 +60,19 @@ begin
   FAuth.Free;
 
   // Destroy Client Module
+  FSalesOrder.Free;
 
   inherited Destroy;
 end;
 
+function TD2RestaurantAPI.SalesOrder: TSalesOrderAPIClient;
+begin
+  Result := FSalesOrder;
+end;
+
 function TD2RestaurantAPI.Auth: TAuthRestAPIClient;
 begin
-  result := FAuth;
+  Result := FAuth;
 end;
 
 end.

@@ -207,6 +207,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Common\API.Auth.pas"/>
+        <DCCReference Include="Common\API.SalesOrder.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

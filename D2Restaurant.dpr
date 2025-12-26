@@ -31,7 +31,8 @@ uses
   Unit_TagSalesOrder in 'Unit_TagSalesOrder.pas' {FormTagSalesOrder},
   Unit_Checkout in 'Unit_Checkout.pas' {FormCheckout},
   Unit_User in 'Unit_User.pas' {FormUser},
-  API.Auth in 'Common\API.Auth.pas';
+  API.Auth in 'Common\API.Auth.pas',
+  API.SalesOrder in 'Common\API.SalesOrder.pas';
 
 {$R *.res}
 

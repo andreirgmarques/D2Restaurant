@@ -1391,17 +1391,6 @@ begin
 end;
 
 
-function FindJSONValue(AObj: TJSONObject; const AName: string): TJSONValue;
-var
-  I: Integer;
-begin
-  Result := nil;
-  for I := 0 to AObj.Count - 1 do
-    if SameText(AObj.Pairs[I].JsonString.ToString, AName) then
-      Exit(AObj.Pairs[I].JsonValue);
-end;
-
-
 procedure TD2BridgeRestResponse.PopuleDataSet(ADataSet: TDataset; AJSONArray: TJSONArray);
 var
   LItem: TJSONObject;
@@ -1452,7 +1441,7 @@ begin
         if Field.ReadOnly or Field.Calculated or Field.Lookup then
           Continue;
 
-        LValue := FindJSONValue(LItem, vFieldName);
+        LValue := LItem.FindValue(vFieldName);
         if LValue = nil then
           Continue;
 
