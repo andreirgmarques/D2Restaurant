@@ -129,6 +129,7 @@
             <Form>PrismSessionBase</Form>
             <DesignClass>TPrismSessionBase</DesignClass>
         </DCCReference>
+        <DCCReference Include="Common\D2Bridge.Rest.Session.pas"/>
         <DCCReference Include="D2RestaurantWebApp.pas">
             <Form>D2RestaurantWebAppGlobal</Form>
         </DCCReference>
@@ -206,7 +207,6 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Common\API.Auth.pas"/>
-        <DCCReference Include="Common\D2Bridge.Rest.Session.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

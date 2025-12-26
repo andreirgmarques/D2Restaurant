@@ -8,6 +8,7 @@ uses
   Vcl.Forms,
   D2Bridge.ServerControllerBase in 'D:\DESEN\Delphi\Componentes\d2bridgeframework\Beta\D2Bridge Framework\D2Bridge.ServerControllerBase.pas' {D2BridgeServerControllerBase: TDataModule},
   Prism.SessionBase in 'D:\DESEN\Delphi\Componentes\d2bridgeframework\Beta\D2Bridge Framework\Prism\Prism.SessionBase.pas' {PrismSessionBase: TPrismSessionBase},
+  D2Bridge.Rest.Session in 'Common\D2Bridge.Rest.Session.pas',
   D2RestaurantWebApp in 'D2RestaurantWebApp.pas' {D2RestaurantWebAppGlobal},
   D2Restaurant_Session in 'D2Restaurant_Session.pas' {D2RestaurantSession},
   D2BridgeFormTemplate in 'D2BridgeFormTemplate.pas',
@@ -30,8 +31,7 @@ uses
   Unit_TagSalesOrder in 'Unit_TagSalesOrder.pas' {FormTagSalesOrder},
   Unit_Checkout in 'Unit_Checkout.pas' {FormCheckout},
   Unit_User in 'Unit_User.pas' {FormUser},
-  API.Auth in 'Common\API.Auth.pas',
-  D2Bridge.Rest.Session in 'Common\D2Bridge.Rest.Session.pas';
+  API.Auth in 'Common\API.Auth.pas';
 
 {$R *.res}
 

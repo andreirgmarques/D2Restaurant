@@ -44,6 +44,8 @@ implementation
 
 { TAPIAuth }
 
+uses Useful;
+
 // Register Endpoints
 class procedure TAPIAuth.RegisterEndPoints;
 begin
@@ -56,23 +58,37 @@ end;
 // Using Basic Auth for User and Password
 class procedure TAPIAuth.PostLogin(const RestSession: TD2BridgeRestSession; Request: TPrismHTTPRequest;
   Response: TPrismHTTPResponse);
-var
-  vUserID: string;
-  vIdentity: string;
 begin
-  if (Request.User = 'UserD2Bridge') and (Request.Password = '123456') then
+  if (Request.User = '') or (Request.Password = '') then
   begin
-    vUserID   := 'UserD2Bridge'; // ID User *Example
-    vIdentity := 'My Unique Identity'; // Identity of Session *Optional
-
-    Response.JSON.AddPair('accessToken', RestSecurity.JWTAccess.Token(vUserID, vIdentity));
-    Response.JSON.AddPair('refreshToken', RestSecurity.JWTRefresh.Token(vUserID, vIdentity));
-    Response.JSON.AddPair('expiresIn', TJSONNumber.Create(RestSecurity.JWTAccess.ExpirationSeconds));
-
-    // Custom Login information
-    Response.JSON.AddPair('userid', vUserID);
-    Response.JSON.AddPair('username', Request.User);
+    Response.JSON(HTTPStatus.ErrorUnauthorized, 'User or Password not found');
+    Exit;
   end;
+
+  var LUserName := Request.User;
+  var LPassword := EncryptPassword(Request.Password);
+
+  RestSession.DM.QryUser.Close;
+  RestSession.DM.QryUser.MacroByName('filter').AsRaw      := 'WHERE email = :email AND password = :password AND status = ''Active''';
+  RestSession.DM.QryUser.ParamByName('email').AsString    := LUserName;
+  RestSession.DM.QryUser.ParamByName('password').AsString := LPassword;
+  RestSession.DM.QryUser.Open;
+  if RestSession.DM.QryUser.IsEmpty then
+  begin
+    Response.JSON(HTTPStatus.ErrorUnauthorized, 'User or Password invalid');
+    Exit;
+  end;
+
+  var LUserID   := RestSession.DM.QryUser.FieldByName('id').AsString;
+  var LIdentity := RestSession.DM.QryUser.FieldByName('id_account').AsString;
+
+  Response.JSON.AddPair('accessToken', RestSecurity.JWTAccess.Token(LUserID, LIdentity));
+  Response.JSON.AddPair('refreshToken', RestSecurity.JWTRefresh.Token(LUserID, LIdentity));
+  Response.JSON.AddPair('expiresIn', TJSONNumber.Create(RestSecurity.JWTAccess.ExpirationSeconds));
+
+  // Custom Login information
+  Response.JSON.AddPair('userid', LUserID);
+  Response.JSON.AddPair('username', Request.User);
 end;
 
 // Refresh Valid Token
@@ -102,8 +118,33 @@ end;
 class procedure TAPIAuth.GetCurrentUser(const RestSession: TD2BridgeRestSession; Request: TPrismHTTPRequest;
   Response: TPrismHTTPResponse);
 begin
-  // Get User ID from Token
-  Response.JSON.AddPair('userid', Request.JWTsub);
+  RestSession.DM.QryAccount.Close;
+  RestSession.DM.QryAccount.MacroByName('filter').AsRaw      := 'WHERE id = :id AND status = ''Active''';
+  RestSession.DM.QryAccount.ParamByName('id').AsInteger      := Request.JWTidentity.ToInteger;
+  RestSession.DM.QryAccount.Open;
+  if RestSession.DM.QryAccount.IsEmpty then
+  begin
+    Response.JSON(HTTPStatus.ErrorForbidden, 'Account not found');
+    Exit;
+  end;
+
+  RestSession.DM.QryUser.Close;
+  RestSession.DM.QryUser.MacroByName('filter').AsRaw         := 'WHERE id_account = :id_account AND id = :id AND status = ''Active''';
+  RestSession.DM.QryUser.ParamByName('id_account').AsInteger := Request.JWTidentity.ToInteger;
+  RestSession.DM.QryUser.ParamByName('id').AsInteger         := Request.JWTsub.ToInteger;
+  RestSession.DM.QryUser.Open;
+  if RestSession.DM.QryUser.IsEmpty then
+  begin
+    Response.JSON(HTTPStatus.ErrorForbidden, 'User invalid');
+    Exit;
+  end;
+
+  Response.JSON.AddPair('accountname', RestSession.DM.QryAccount.FieldByName('name').AsString);
+  Response.JSON.AddPair('userid', RestSession.DM.QryUser.FieldByName('id').AsInteger);
+  Response.JSON.AddPair('useridaccount', RestSession.DM.QryUser.FieldByName('id_account').AsInteger);
+  Response.JSON.AddPair('username', RestSession.DM.QryUser.FieldByName('name').AsString);
+  Response.JSON.AddPair('useremail', RestSession.DM.QryUser.FieldByName('email').AsString);
+  Response.JSON.AddPair('useradmin', SameText(RestSession.DM.QryUser.FieldByName('admin').AsString, 'Yes'));
 end;
 
 // Health example
